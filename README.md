@@ -1,4 +1,3 @@
-# Inventory-Management-System-Api
 # Inventory Management System API
 
 ## Project Description
