@@ -1,0 +1,37 @@
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Runtime files
+*.pid
+*.seed
+
+# Temporary files
+*.tmp
+*.temp
+
+# VS Code (optional)
+.vscode/
+
+# Eclipse / STS (optional)
+.classpath
+.project
+.settings/
+
+# NetBeans (optional)
+/nbproject/private/
+/nbbuild/
+/dist/
