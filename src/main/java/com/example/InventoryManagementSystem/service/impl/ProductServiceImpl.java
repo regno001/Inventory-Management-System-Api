@@ -3,6 +3,7 @@ package com.example.InventoryManagementSystem.service.impl;
 import com.example.InventoryManagementSystem.dto.AddProductReqDto;
 import com.example.InventoryManagementSystem.dto.ProductDto;
 import com.example.InventoryManagementSystem.entity.Product;
+import com.example.InventoryManagementSystem.exception.ResourceNotFoundException;
 import com.example.InventoryManagementSystem.repository.ProductRepository;
 import com.example.InventoryManagementSystem.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -28,13 +29,7 @@ private final ModelMapper modelMapper;
 
     product= productRepository.save(product);
 
-    ProductDto dto = new ProductDto();
-
-    dto.setId(product.getId());
-    dto.setName(product.getName());
-    dto.setDescription(product.getDescription());
-    dto.setPrice(product.getPrice());
-     dto.setQuantity(product.getQuantity());
+    ProductDto dto = modelMapper.map(product , ProductDto.class);
 
      return dto;
   }
@@ -43,15 +38,8 @@ private final ModelMapper modelMapper;
 
     @Override
     public ProductDto getProduct(Long id) {
-        Product product = productRepository.findById(id).orElseThrow(()-> new RuntimeException("Product not found"));
-        ProductDto dto = new ProductDto();
-
-        dto.setId(product.getId());
-        dto.setName(product.getName());
-
-        dto.setDescription(product.getDescription());
-        dto.setPrice(product.getPrice());
-        dto.setQuantity(product.getQuantity());
+        Product product = productRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Product not found witd id "+id));
+        ProductDto dto = modelMapper.map(product ,ProductDto.class);
 
         return dto;
 
@@ -61,15 +49,8 @@ private final ModelMapper modelMapper;
     @Override
     public List<ProductDto> getAllProduct() {
         return productRepository.findAll().stream().map(product->{
-            ProductDto dto = new ProductDto();
-            dto.setId(product.getId());
-            dto.setName(product.getName());
-            dto.setPrice(product.getPrice());
-            dto.setDescription(product.getDescription());
-            dto.setQuantity(product.getQuantity());
+            ProductDto dto = modelMapper.map(product, ProductDto.class);
             return  dto;
-
-
         }).toList();
     }
 
@@ -81,7 +62,7 @@ private final ModelMapper modelMapper;
 
     @Override
     public ProductDto updateProduct(Long id, AddProductReqDto request) {
-        Product product = productRepository.findById(id).orElseThrow(()-> new RuntimeException("Product not Found"));
+        Product product = productRepository.findById(id).orElseThrow(()-> new RuntimeException("Product not Foundwith id "+id));
 
         if(request.getName()!=null){
             product.setName(request.getName());

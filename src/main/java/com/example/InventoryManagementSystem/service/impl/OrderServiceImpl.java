@@ -3,6 +3,8 @@ package com.example.InventoryManagementSystem.service.impl;
 import com.example.InventoryManagementSystem.dto.OrderRequestDto;
 import com.example.InventoryManagementSystem.dto.OrderResponseDto;
 import com.example.InventoryManagementSystem.entity.*;
+import com.example.InventoryManagementSystem.exception.InsufficientStock;
+import com.example.InventoryManagementSystem.exception.ResourceNotFoundException;
 import com.example.InventoryManagementSystem.repository.OrderItemRepository;
 import com.example.InventoryManagementSystem.repository.OrderRepository;
 import com.example.InventoryManagementSystem.repository.ProductRepository;
@@ -38,7 +40,7 @@ public class OrderServiceImpl implements OrderService {
             Product product = productRepository.findById(itemDto.getProductId()).orElseThrow(() -> new RuntimeException("Product not found"));
 
             if (product.getQuantity() < itemDto.getQuantity()) {
-                throw new RuntimeException("Insufficient Stock");
+                throw new InsufficientStock("Insufficient Stock");
             }
 
             product.setQuantity(product.getQuantity() - itemDto.getQuantity());

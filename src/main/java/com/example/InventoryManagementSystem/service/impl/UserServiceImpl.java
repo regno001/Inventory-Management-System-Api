@@ -1,6 +1,8 @@
 package com.example.InventoryManagementSystem.service.impl;
 
 import com.example.InventoryManagementSystem.entity.User;
+import com.example.InventoryManagementSystem.exception.ResourceNotFoundException;
+import com.example.InventoryManagementSystem.exception.UserNotFound;
 import com.example.InventoryManagementSystem.repository.UserRepository;
 import com.example.InventoryManagementSystem.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +22,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByid(Long id) {
-        return userRepository.findById(id).orElseThrow(()-> new RuntimeException("User Not found"));
+        return userRepository.findById(id).orElseThrow(()-> new UserNotFound("User Not found with id "+ id));
     }
 
     @Override
