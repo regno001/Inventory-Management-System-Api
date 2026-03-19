@@ -5,14 +5,18 @@ import com.example.InventoryManagementSystem.dto.RegisterRequestDto;
 import com.example.InventoryManagementSystem.entity.Role;
 import com.example.InventoryManagementSystem.entity.User;
 import com.example.InventoryManagementSystem.repository.UserRepository;
+import com.example.InventoryManagementSystem.security.JwtService;
 import com.example.InventoryManagementSystem.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
-    public final UserRepository userRepository;
+    private final JwtService jwtService;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public String register(RegisterRequestDto request) {
@@ -20,7 +24,7 @@ public class AuthServiceImpl implements AuthService {
 
         user.setName(request.getName());
         user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(Role.USER);
 
         userRepository.save(user);
@@ -35,10 +39,10 @@ public class AuthServiceImpl implements AuthService {
         if(user== null){
             throw new RuntimeException("User not Found");
 
-        }if(!user.getPassword().equals(request.getPassword())){
-            throw new RuntimeException("Invalid password");
+        }if(!passwordEncoder.matches(request.getPassword(),user.getPassword())){
+            throw new RuntimeException("Password is Incorrect");
         }
-        return "Login Successful";
+        return jwtService.generateToken(user.getEmail());
 
     }
 }

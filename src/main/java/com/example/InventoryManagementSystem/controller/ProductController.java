@@ -3,6 +3,7 @@ package com.example.InventoryManagementSystem.controller;
 import com.example.InventoryManagementSystem.dto.AddProductReqDto;
 import com.example.InventoryManagementSystem.dto.ProductDto;
 import com.example.InventoryManagementSystem.service.ProductService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +17,9 @@ import java.util.List;
 public class ProductController {
     private final ProductService productService;
 
+
     @PostMapping
-    public ResponseEntity<ProductDto> createProduct(@RequestBody AddProductReqDto request){
+    public ResponseEntity<ProductDto> createProduct(@Valid @RequestBody AddProductReqDto request){
         ProductDto product = productService.createProduct(request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(product);
@@ -31,7 +33,7 @@ public class ProductController {
         return ResponseEntity.ok(product);
 
     }
-
+    //Admin User
     @GetMapping("/{id}")
     public ResponseEntity<ProductDto> getProductByID(@PathVariable Long id){
         ProductDto product = productService.getProduct(id);

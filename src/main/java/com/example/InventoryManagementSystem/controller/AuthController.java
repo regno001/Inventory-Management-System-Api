@@ -4,6 +4,7 @@ import com.example.InventoryManagementSystem.dto.LoginRequestDto;
 import com.example.InventoryManagementSystem.dto.RegisterRequestDto;
 import com.example.InventoryManagementSystem.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AuthController {
 
+    @Autowired
     private final AuthService authService;
 
     @PostMapping("/register")
