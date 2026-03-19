@@ -1,0 +1,43 @@
+//User Creation
+POST http://localhost:8081/users/register
+{   "name": "Rahul",
+  "email": "rahul@gmail.com",
+  "password": "123456"
+}
+//User Login
+POST http://localhost:8081/users/login
+{
+"email":"rahul@gmail.com",
+"password":"123456"
+}
+
+//Adding product
+POST http://localhost:8081/products
+{
+   "name": "Laptop",
+   "description": "Gaming Laptop",
+   "price": 75000,
+   "quantity": 10
+}
+//updating product
+{
+"description": "Office Laptop",
+"price": 5000,
+}
+//getting product data
+GET http://localhost:8081/products
+
+//orders
+{
+  "userId": 1,
+  "items": [
+    {
+      "productId": 2,
+      "quantity": 3
+    },
+    {
+      "productId": 5,
+      "quantity": 1
+    }
+  ]
+}
