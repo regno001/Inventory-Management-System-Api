@@ -38,11 +38,22 @@ Packages:
 - dto
 - config
 - exception
+- security
+  
 
 ---
 
 ## Database
 
 Database used: **PostgreSQL**
+
+# Port configuration
+server.port=8081
+
+# DB configuration
+//Create a DB with Name inventoryDB
+spring.datasource.url=jdbc:postgresql://localhost:5432/inventoryDB
+spring.datasource.username=//postgresDB name
+spring.datasource.password=//password of your PostgresDB admin Access
 
 Example configuration in `application.properties`:
