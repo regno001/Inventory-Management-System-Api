@@ -51,9 +51,21 @@ Database used: **PostgreSQL**
 server.port=8081
 
 # DB configuration
+//resource->appilcation.properties
 //Create a DB with Name inventoryDB
 spring.datasource.url=jdbc:postgresql://localhost:5432/inventoryDB
 spring.datasource.username=//postgresDB name
 spring.datasource.password=//password of your PostgresDB admin Access
+
+# Working URL will be 
+POST http://localhost:8081/users/register
+POST http://localhost:8081/users/login
+POST http://localhost:8081/orders
+POST http://localhost:8081/users/register
+GET http://localhost:8081/products
+GET http://localhost:8081/products/id->id=productid ex 1,2,3,4..
+DELETE http://localhost:8081/products/id->id=productid ex 1,2,3,4..
+PATCH http://localhost:8081/products/id->id=productid ex 1,2,3,4..
+
 
 Example configuration in `application.properties`:
