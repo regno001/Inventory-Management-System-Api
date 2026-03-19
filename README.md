@@ -62,6 +62,7 @@ server.port=8081
 - POST http://localhost:8081/users/login
 - POST http://localhost:8081/orders
 - GET http://localhost:8081/products
+- POST http://localhost:8081/products
 - GET http://localhost:8081/products/id->id=productid ex 1,2,3,4..
 - DELETE http://localhost:8081/products/id->id=productid ex 1,2,3,4..
 - PATCH http://localhost:8081/products/id->id=productid ex 1,2,3,4..
