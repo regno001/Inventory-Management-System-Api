@@ -27,7 +27,7 @@ public class OrderServiceImpl implements OrderService {
     private final UserRepository userRepository;
     private final OrderItemRepository orderItemRepository;
 
-    // ✅ Create Order
+
     @Override
     @Transactional
     public OrderResponseDto createOrder(OrderRequestDto request) {
@@ -87,7 +87,7 @@ public class OrderServiceImpl implements OrderService {
         return mapToResponse(order);
     }
 
-    // ✅ Update Order Status
+
     @Override
     public OrderResponseDto updateOrderStatus(Long orderId, String status) {
 
@@ -100,14 +100,14 @@ public class OrderServiceImpl implements OrderService {
         return mapToResponse(order);
     }
 
-    // ✅ Mapping Method
+
     private OrderResponseDto mapToResponse(Order order) {
 
         OrderResponseDto dto = new OrderResponseDto();
 
         dto.setOrderId(order.getId());
         dto.setUserId(order.getUser().getId());
-        dto.setTotalPrice(order.getTotalPrice()); // ✅ now correct
+        dto.setTotalPrice(order.getTotalPrice());
         dto.setStatus(order.getStatus().name());
         dto.setCreatedAt(order.getCreatedAt());
 
