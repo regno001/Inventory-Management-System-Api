@@ -27,17 +27,21 @@ POST http://localhost:8081/products
 //getting product data
 GET http://localhost:8081/products
 
+POST http://localhost:8081/orders
 //orders
+
 {
   "userId": 1,
   "items": [
     {
-      "productId": 2,
-      "quantity": 3
+      "productId": 1,
+      "quantity": 2
     },
     {
-      "productId": 5,
+      "productId": 2,
       "quantity": 1
     }
   ]
 }
+//Update Status
+PATCH http://localhost:8081/orders/16?status=COMPLETED || CANCELLED

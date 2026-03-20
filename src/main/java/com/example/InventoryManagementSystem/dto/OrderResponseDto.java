@@ -13,7 +13,7 @@ private Long userId;
 
 private List<OrderItemDto> items;
 
-private Integer totalPrice;
+private Double totalPrice;
 
 private String status;
 

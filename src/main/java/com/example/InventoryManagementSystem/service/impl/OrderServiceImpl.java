@@ -1,5 +1,6 @@
 package com.example.InventoryManagementSystem.service.impl;
 
+import com.example.InventoryManagementSystem.dto.OrderItemDto;
 import com.example.InventoryManagementSystem.dto.OrderRequestDto;
 import com.example.InventoryManagementSystem.dto.OrderResponseDto;
 import com.example.InventoryManagementSystem.entity.*;
@@ -12,42 +13,52 @@ import com.example.InventoryManagementSystem.repository.UserRepository;
 import com.example.InventoryManagementSystem.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
+
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
     private final OrderItemRepository orderItemRepository;
 
-
+    // ✅ Create Order
     @Override
+    @Transactional
     public OrderResponseDto createOrder(OrderRequestDto request) {
-        User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new RuntimeException("User not Found"));
+
+        User user = userRepository.findById(request.getUserId())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
         Order order = new Order();
         order.setUser(user);
         order.setStatus(OrderStatus.PENDING);
         order.setCreatedAt(LocalDateTime.now());
 
-        int totalPrice = 0;
-
         order = orderRepository.save(order);
 
-        for (var itemDto : request.getItems()) {
-            Product product = productRepository.findById(itemDto.getProductId()).orElseThrow(() -> new RuntimeException("Product not found"));
+        double totalPrice = 0;
+
+        for (OrderItemDto itemDto : request.getItems()) {
+
+            Product product = productRepository.findById(itemDto.getProductId())
+                    .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
             if (product.getQuantity() < itemDto.getQuantity()) {
-                throw new InsufficientStock("Insufficient Stock");
+                throw new InsufficientStock("Insufficient stock for product: " + product.getName());
             }
 
+            // ✅ reduce stock
             product.setQuantity(product.getQuantity() - itemDto.getQuantity());
             productRepository.save(product);
 
+            // ✅ create order item
             OrderItem item = new OrderItem();
-
             item.setOrder(order);
             item.setProduct(product);
             item.setQuantity(itemDto.getQuantity());
@@ -56,19 +67,73 @@ public class OrderServiceImpl implements OrderService {
             orderItemRepository.save(item);
 
             totalPrice += product.getPrice() * itemDto.getQuantity();
-
         }
+
+        // ✅ IMPORTANT FIX (Double)
         order.setTotalPrice(totalPrice);
 
         orderRepository.save(order);
 
-        OrderResponseDto response = new OrderResponseDto();
-        response.setOrderId(order.getId());
-        response.setUserId(user.getId());
-        response.setTotalPrice(totalPrice);
-        response.setStatus(order.getStatus().name());
-        response.setCreatedAt(order.getCreatedAt());
-        return response;
+        return mapToResponse(order);
+    }
 
+    // ✅ Get All Orders
+    @Override
+    public List<OrderResponseDto> getAllOrderDetails() {
+        return orderRepository.findAll()
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
+
+    // ✅ Get Order By Id
+    @Override
+    public OrderResponseDto getOrderById(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+
+        return mapToResponse(order);
+    }
+
+    // ✅ Update Order Status
+    @Override
+    public OrderResponseDto updateOrderStatus(Long orderId, String status) {
+
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+
+        order.setStatus(OrderStatus.valueOf(status.toUpperCase()));
+        orderRepository.save(order);
+
+        return mapToResponse(order);
+    }
+
+    // ✅ Mapping Method
+    private OrderResponseDto mapToResponse(Order order) {
+
+        OrderResponseDto dto = new OrderResponseDto();
+
+        dto.setOrderId(order.getId());
+        dto.setUserId(order.getUser().getId());
+        dto.setTotalPrice(order.getTotalPrice()); // ✅ now correct
+        dto.setStatus(order.getStatus().name());
+        dto.setCreatedAt(order.getCreatedAt());
+
+        if (order.getItem() != null) {
+            List<OrderItemDto> itemDtos = order.getItem().stream().map(item -> {
+                OrderItemDto itemDto = new OrderItemDto();
+
+                itemDto.setProductId(item.getProduct().getId());
+                itemDto.setProductName(item.getProduct().getName());
+                itemDto.setQuantity(item.getQuantity());
+                itemDto.setPrice(item.getPrice());
+
+                return itemDto;
+            }).toList();
+
+            dto.setItems(itemDtos);
+        }
+
+        return dto;
     }
 }

@@ -18,13 +18,15 @@ public class Order {
     @JoinColumn(name="user_id")
     private User user;
 
-    private Integer totalPrice;
+    private Double totalPrice;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
     private LocalDateTime createdAt;
 
+    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL)
+    private java.util.List<OrderItem> item = new java.util.ArrayList<>();
 
 
 }
