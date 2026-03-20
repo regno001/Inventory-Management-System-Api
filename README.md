@@ -38,6 +38,8 @@ Packages:
 - dto
 - config
 - exception
+- security
+  
 
 ---
 
@@ -45,4 +47,22 @@ Packages:
 
 Database used: **PostgreSQL**
 
-Example configuration in `application.properties`:
+# Port configuration
+server.port=8081
+
+# DB configuration
+- file name :resource->appilcation.properties
+- Create a DB with Name inventoryDB and paste below Commands
+- spring.datasource.url=jdbc:postgresql://localhost:5432/inventoryDB
+- spring.datasource.username=//postgresDB name
+- spring.datasource.password=//password of your PostgresDB admin Access
+
+# Working URL will be 
+- POST http://localhost:8081/users/register
+- POST http://localhost:8081/users/login
+- POST http://localhost:8081/orders
+- GET http://localhost:8081/products
+- POST http://localhost:8081/products
+- GET http://localhost:8081/products/id->id=productid ex 1,2,3,4..
+- DELETE http://localhost:8081/products/id->id=productid ex 1,2,3,4..
+- PATCH http://localhost:8081/products/id->id=productid ex 1,2,3,4..
