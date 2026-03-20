@@ -1,15 +1,12 @@
 package com.example.InventoryManagementSystem.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 @Data
 public class AddProductReqDto {
 
-    @NotBlank
+    @NotBlank(message = "Product name cannot be empty")
     private String name;
 
     @NotBlank
@@ -17,10 +14,11 @@ public class AddProductReqDto {
 
     @NotNull
     @Positive
+    @Min(value = 100, message = "price must be grater then 100")
     private Double price;
 
     @NotNull
-    @PositiveOrZero
+    @Positive
     private Integer quantity;
 
 }
