@@ -51,8 +51,8 @@ Database used: **PostgreSQL**
 server.port=8081
 
 # DB configuration
-- resource->appilcation.properties
-- Create a DB with Name inventoryDB
+- file name :resource->appilcation.properties
+- Create a DB with Name inventoryDB and paste below Commands
 - spring.datasource.url=jdbc:postgresql://localhost:5432/inventoryDB
 - spring.datasource.username=//postgresDB name
 - spring.datasource.password=//password of your PostgresDB admin Access
