@@ -26,7 +26,8 @@ POST http://localhost:8081/products
 }
 //getting product data
 GET http://localhost:8081/products
-
+//getting All order Details
+GET
 POST http://localhost:8081/orders
 //orders
 

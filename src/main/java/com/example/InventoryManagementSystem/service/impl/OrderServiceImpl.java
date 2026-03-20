@@ -39,9 +39,7 @@ public class OrderServiceImpl implements OrderService {
         order.setUser(user);
         order.setStatus(OrderStatus.PENDING);
         order.setCreatedAt(LocalDateTime.now());
-
         order = orderRepository.save(order);
-
         double totalPrice = 0;
 
         for (OrderItemDto itemDto : request.getItems()) {
@@ -53,31 +51,26 @@ public class OrderServiceImpl implements OrderService {
                 throw new InsufficientStock("Insufficient stock for product: " + product.getName());
             }
 
-            // ✅ reduce stock
             product.setQuantity(product.getQuantity() - itemDto.getQuantity());
             productRepository.save(product);
 
-            // ✅ create order item
+
             OrderItem item = new OrderItem();
             item.setOrder(order);
             item.setProduct(product);
             item.setQuantity(itemDto.getQuantity());
             item.setPrice(product.getPrice());
-
+            order.getItem().add(item);
             orderItemRepository.save(item);
-
             totalPrice += product.getPrice() * itemDto.getQuantity();
         }
 
-        // ✅ IMPORTANT FIX (Double)
+
         order.setTotalPrice(totalPrice);
-
         orderRepository.save(order);
-
         return mapToResponse(order);
     }
 
-    // ✅ Get All Orders
     @Override
     public List<OrderResponseDto> getAllOrderDetails() {
         return orderRepository.findAll()
@@ -86,7 +79,6 @@ public class OrderServiceImpl implements OrderService {
                 .toList();
     }
 
-    // ✅ Get Order By Id
     @Override
     public OrderResponseDto getOrderById(Long orderId) {
         Order order = orderRepository.findById(orderId)
