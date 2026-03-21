@@ -14,5 +14,5 @@ List<ProductDto> getAllProduct();
 
 void deleteProduct(Long id);
 
-    ProductDto updateProduct(Long id, AddProductReqDto request);
+ProductDto updateProduct(Long id, AddProductReqDto request);
 }
